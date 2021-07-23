@@ -10,4 +10,9 @@ contract("cointoss", function (/* accounts */) {
     await cointoss.deployed();
     return assert.isTrue(true);
   });
+
+
+  //test entering contest player 1, player 2
+
+  //test entering contest if full.
 });
