@@ -17,9 +17,7 @@ contract cointoss {
             0,
             address(0),
             0,
-            0,
             address(0),
-            0,
             0
         );
         for (uint256 i = 0; i < 4; i++) {
@@ -28,9 +26,9 @@ contract cointoss {
         }
     }
 
+
     /*
     When user clicks on the start game button.
-    Does not start game cause both players need to ready up.
   */
     //should this return false when fail?
     function enterContest(uint256 wagerIndex, uint256 wager) public {
@@ -39,34 +37,42 @@ contract cointoss {
         uint256 failed = 1;
         for (count; count < 4; count++) {
             if (coinTossWagers[count].wagerIndex == wagerIndex) {
-              failed = 0;
-              break;
+                failed = 0;
+                break;
             }
         }
 
         //if not return wager and the end condition.
-        if(failed == 1){
-          //end somehow and return money
+        if (failed == 1) {
+            //wagerIndex not found
+            //end somehow and return money
+        } else {
+            //enter user into wager
+            failed = 1;
+            address newPlayer = msg.sender;
+            //check if can be user1,
+            //check if user isnt already registered into wager
+            //check if wagers are negative
+            if (coinTossWagers[count].user1 == address(0)) {
+                failed = 0;
+                coinTossWagers[count].user1 = newPlayer;
+                coinTossWagers[count].user1wager = wager;
+            } else if (coinTossWagers[count].user2 == address(0)) {
+                //check if can be user2.
+                failed = 0;
+                coinTossWagers[count].user2 = newPlayer;
+                coinTossWagers[count].user2wager = wager;
+            }
+
+            if (failed == 0) {
+                //end contract and return money
+                //user cannot enter wager
+            } else {
+                //if both players have entered and are now ready, execute toss fn and return fn.
+                //is this how you do that?
+            }
+
         }
-
-        address newPlayer = msg.sender;
-        coinTossWager[];
-
-        //check if can be user1,
-        if (coinTossWagers[count].user1 == address(0)) {
-            failed = 0;
-            coinTossWagers[count].user1wager = wager;
-        } else if (coinTossWagers[count].user2 == address(0)) {
-            //check if can be user2.
-            failed = 0;
-            coinTossWagers[count].user2wager = wager;
-        }
-
-
-        //need to write tests to test this function after.
-
-        //is this how you do that?
-        //if both players have entered and are now ready, execute toss fn and return fn.
     }
 
     /*
