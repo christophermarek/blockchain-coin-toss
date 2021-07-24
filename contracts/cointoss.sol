@@ -26,14 +26,15 @@ contract cointoss {
         }
     }
 
-
     /*
     When user clicks on the start game button.
   */
     //should this return false when fail?
     function enterContest(uint256 wagerIndex, uint256 wager) public {
-
-        require(wagerIndex >= 0 && wagerIndex < 4, "Invalid wager index, must be between 0-3");
+        require(
+            wagerIndex >= 0 && wagerIndex < 4,
+            "Invalid wager index, must be between 0-3"
+        );
         require(wager > 0, "Wager must be a positive number");
 
         //check if wagerIndex has room
@@ -65,20 +66,37 @@ contract cointoss {
                 failed = 0;
                 coinTossWagers[count].user2 = newPlayer;
                 coinTossWagers[count].user2wager = wager;
-            }else{
+            } else {
                 //error
                 revert("Error entering into wager index, might be full");
             }
-
-          
-
         }
     }
 
     /*
     only if other player did not ready up yet. 
   */
-    function leaveContest(uint256 wagerIndex) public {}
+    function leaveContest(uint256 wagerIndex) public {
+        require(
+            wagerIndex >= 0 && wagerIndex < 4,
+            "Invalid wager index, must be between 0-3"
+        );
+
+        coinTossWager memory wagerSet = coinTossWagers[wagerIndex];
+        if (wagerSet.user1 == msg.sender) {
+            coinTossWagers[wagerIndex].user1 = address(0);
+            coinTossWagers[wagerIndex].user1wager = 0;
+        } else if (wagerSet.user2 == msg.sender) {
+            coinTossWagers[wagerIndex].user2 = address(0);
+            coinTossWagers[wagerIndex].user2wager = 0;
+        } else {
+            //error resetting wager, either incorrect user
+            //or incorrect wager
+            revert(
+                "Error leaving contest, either incorrect user or incorrect wager index"
+            );
+        }
+    }
 
     //way to end wager after 60 seconds inactivity.
 }

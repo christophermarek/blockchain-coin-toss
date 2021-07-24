@@ -103,16 +103,27 @@ contract('cointoss', function () {
         
     })
     
-    
-    //then test negative wagers
+    //test leave wager
+    leave wager function is ready
+    //then test execute coin flip
 
-    //and incorrect wagers
+    need to do this after testing removing someone
+    the catch will execute if its full too
+    //then test negative wagers
+    it(`test negative wager`, async function () {
+        //will throw an error if its full so test is for error
+        try{
+            await instance.enterContest(0, -1, {
+                from: player3address,
+            })
+            return false;
+        }catch(error){
+            return true;
+        }
+        
+    })
 
     //test incorrecrt wagerIndex
 
-    //then test addding a user to a filled slott
 
-    //then test execute coin flip
-
-    //test leave wager
 })
