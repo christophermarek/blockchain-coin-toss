@@ -10,10 +10,10 @@ contract('cointoss', function (/* accounts */) {
 
     const wagerIndex = 0;
     //enter player 1 in wager 0
-    const player1address = '0x9700fe220d70303e91ed47f1c80319e30bef4bfa';
+    const player1address = '0x9700fe220d70303E91ed47f1C80319E30bEF4bfa';
     const player1Wager = 2;
     //enter player 2 in wager 0
-    const player2address = '0x05ea98b4e80277f43b8704fd93f96a4c8a9782f1';
+    const player2address = '0x05Ea98B4e80277f43B8704fD93F96a4C8a9782f1';
     const player2wager = 1;
 
     //test player one entered
@@ -21,12 +21,13 @@ contract('cointoss', function (/* accounts */) {
         await instance.enterContest(wagerIndex, player1Wager, {
             from: player1address,
         })
-        console.log(await instance.methods);
-        console.log("########");
-        console.log("########");
-        console.log("########");
-        console.log("########");
-        console.log(await instance.methods.coinTossWagers.call());
+        let result = await instance.coinTossWagers(0);
+        //console.log(await instance.coinTossWagers(0));
+        console.log(Object.keys(result));
+        console.log(result.user1);
+        return assert.equal(player1address, result.user1);
+
+        //console.log(await instance.coinTossWagers(0));
         //await cointoss.methods.coinTossWagers.call();
     })
 
