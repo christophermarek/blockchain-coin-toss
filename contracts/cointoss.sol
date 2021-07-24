@@ -32,6 +32,10 @@ contract cointoss {
   */
     //should this return false when fail?
     function enterContest(uint256 wagerIndex, uint256 wager) public {
+
+        require(wagerIndex >= 0 && wagerIndex < 4, "Invalid wager index, must be between 0-3");
+        require(wager > 0, "Wager must be a positive number");
+
         //check if wagerIndex has room
         uint256 count = 0;
         uint256 failed = 1;
@@ -51,8 +55,7 @@ contract cointoss {
             failed = 1;
             address newPlayer = msg.sender;
             //check if can be user1,
-            //check if user isnt already registered into wager
-            //check if wagers are negative
+            //check if user is already registered into wager
             if (coinTossWagers[count].user1 == address(0)) {
                 failed = 0;
                 coinTossWagers[count].user1 = newPlayer;
@@ -62,15 +65,12 @@ contract cointoss {
                 failed = 0;
                 coinTossWagers[count].user2 = newPlayer;
                 coinTossWagers[count].user2wager = wager;
+            }else{
+                //error
+                revert("Error entering into wager index, might be full");
             }
 
-            if (failed == 0) {
-                //end contract and return money
-                //user cannot enter wager
-            } else {
-                //if both players have entered and are now ready, execute toss fn and return fn.
-                //is this how you do that?
-            }
+          
 
         }
     }

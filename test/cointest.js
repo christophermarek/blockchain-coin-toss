@@ -1,6 +1,6 @@
 const cointoss = artifacts.require('cointoss')
 
-contract('cointoss', function (/* accounts */) {
+contract('cointoss', function () {
     let instance;
 
     it('should assert true', async function () {
@@ -23,12 +23,7 @@ contract('cointoss', function (/* accounts */) {
             from: player1address,
         })
         let result = await instance.coinTossWagers(wagerIndex);
-        //console.log(await instance.coinTossWagers(0));
-        //console.log(Object.keys(result));
-        //console.log(result.user1);
         return assert.equal(player1address, result.user1);
-        //console.log(await instance.coinTossWagers(0));
-        //await cointoss.methods.coinTossWagers.call();
     })
 
     it(`player 1 wager entered wagerIndex: ${wagerIndex}`, async function () {
@@ -51,6 +46,73 @@ contract('cointoss', function (/* accounts */) {
         return assert.equal(player2wager, result.user2wager);
     })
 
+    //test each slot filled correctly
+    it(`filling each wager slot out of 4`, async function () {
+        //fill all wagers
+        await instance.enterContest(1, player1Wager, {
+            from: player1address,
+        });
+        await instance.enterContest(2, player1Wager, {
+            from: player1address,
+        });
+        await instance.enterContest(3, player1Wager, {
+            from: player1address,
+        });
+        await instance.enterContest(1, player2wager, {
+            from: player2address,
+        });
+        await instance.enterContest(2, player2wager, {
+            from: player2address,
+        });
+        await instance.enterContest(3, player2wager, {
+            from: player2address,
+        });
 
+        let valid = true;
+        //get all 4 wager slots
+        let slot1 = await instance.coinTossWagers(1);        
+        if(!(slot1.user1 == player1address && slot1.user1wager == player1Wager && slot1.user2 == player2address && slot1.user2wager == player2wager)){
+            valid = false
+        }
+        let slot2 = await instance.coinTossWagers(2);
+        if(!(slot2.user1 == player1address && slot2.user1wager == player1Wager && slot2.user2 == player2address && slot2.user2wager == player2wager)){
+            valid = false
+        }
+        let slot3 = await instance.coinTossWagers(3);
+        if(!(slot3.user1 == player1address && slot3.user1wager == player1Wager && slot3.user2 == player2address && slot3.user2wager == player2wager)){
+            valid = false
+        }
+        
+        return valid;
+    })
+
+    
     //test entering contest if full.
+    let player3address = '0x7a86c9118D1b50e376b6B9FeeE1603940E5615f6';
+    let player3wager = 5;
+    it(`test joining full wager`, async function () {
+        //will throw an error if its full so test is for error
+        try{
+            await instance.enterContest(0, player3wager, {
+                from: player3address,
+            })
+            return false;
+        }catch(error){
+            return true;
+        }
+        
+    })
+    
+    
+    //then test negative wagers
+
+    //and incorrect wagers
+
+    //test incorrecrt wagerIndex
+
+    //then test addding a user to a filled slott
+
+    //then test execute coin flip
+
+    //test leave wager
 })
