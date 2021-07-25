@@ -111,17 +111,15 @@ contract('cointoss', function () {
                 from: player1address,
             })
             let slot0 = await instance.coinTossWagers(0);
-
             return slot0.user1 == "0x0" ? true : false;
         } catch (error) {
             return false;
         }
 
     })
-    
+
+
     //then test execute coin flip
-
-
 
 
 })
