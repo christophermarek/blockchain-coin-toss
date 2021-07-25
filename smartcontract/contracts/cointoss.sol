@@ -13,7 +13,7 @@ contract cointoss {
 
     coinTossWager[4] public coinTossWagers;
 
-    event LogWithdrawal(address receiver, uint amount);
+    event LogWithdrawal(address receiver, uint256 amount);
 
     constructor() public {
         coinTossWager memory defaultCoinTossWager = coinTossWager(
@@ -42,14 +42,21 @@ contract cointoss {
             //valid wager
             //get number for coin flip between 0 and 1
             //i know this isnt true randomness
-            uint winner = uint8(uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty)))%2);
+            uint256 winner = uint8(
+                uint256(
+                    keccak256(
+                        abi.encodePacked(block.timestamp, block.difficulty)
+                    )
+                ) % 2
+            );
 
-            uint reward = coinTossWagers[wagerIndex].user1wager + coinTossWagers[wagerIndex].user2wager;
+            uint256 reward = coinTossWagers[wagerIndex].user1wager +
+                coinTossWagers[wagerIndex].user2wager;
             address winnerAddress;
 
-            if(winner == 0){
-                 winnerAddress = user1;
-            }else{
+            if (winner == 0) {
+                winnerAddress = user1;
+            } else {
                 winnerAddress = user2;
             }
 

@@ -117,9 +117,9 @@ contract('cointoss', function () {
         }
 
     })
-    
+
     //test balances subtracting
-    
+
     //test winner being payed out
 
     //then test execute coin flip
