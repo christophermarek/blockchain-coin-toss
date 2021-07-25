@@ -70,60 +70,58 @@ contract('cointoss', function () {
 
         let valid = true;
         //get all 4 wager slots
-        let slot1 = await instance.coinTossWagers(1);        
-        if(!(slot1.user1 == player1address && slot1.user1wager == player1Wager && slot1.user2 == player2address && slot1.user2wager == player2wager)){
+        let slot1 = await instance.coinTossWagers(1);
+        if (!(slot1.user1 == player1address && slot1.user1wager == player1Wager && slot1.user2 == player2address && slot1.user2wager == player2wager)) {
             valid = false
         }
         let slot2 = await instance.coinTossWagers(2);
-        if(!(slot2.user1 == player1address && slot2.user1wager == player1Wager && slot2.user2 == player2address && slot2.user2wager == player2wager)){
+        if (!(slot2.user1 == player1address && slot2.user1wager == player1Wager && slot2.user2 == player2address && slot2.user2wager == player2wager)) {
             valid = false
         }
         let slot3 = await instance.coinTossWagers(3);
-        if(!(slot3.user1 == player1address && slot3.user1wager == player1Wager && slot3.user2 == player2address && slot3.user2wager == player2wager)){
+        if (!(slot3.user1 == player1address && slot3.user1wager == player1Wager && slot3.user2 == player2address && slot3.user2wager == player2wager)) {
             valid = false
         }
-        
+
         return valid;
     })
 
-    
+
     //test entering contest if full.
     let player3address = '0x7a86c9118D1b50e376b6B9FeeE1603940E5615f6';
     let player3wager = 5;
     it(`test joining full wager`, async function () {
         //will throw an error if its full so test is for error
-        try{
+        try {
             await instance.enterContest(0, player3wager, {
                 from: player3address,
             })
             return false;
-        }catch(error){
+        } catch (error) {
             return true;
         }
-        
+
+    })
+
+    //test leave wager
+    it(`test leaving wager`, async function () {
+        //will throw an error if its full so test is for error
+        try {
+            await instance.leaveContest(0, {
+                from: player1address,
+            })
+            let slot0 = await instance.coinTossWagers(0);
+
+            return slot0.user1 == "0x0" ? true : false;
+        } catch (error) {
+            return false;
+        }
+
     })
     
-    //test leave wager
-    leave wager function is ready
     //then test execute coin flip
 
-    need to do this after testing removing someone
-    the catch will execute if its full too
-    //then test negative wagers
-    it(`test negative wager`, async function () {
-        //will throw an error if its full so test is for error
-        try{
-            await instance.enterContest(0, -1, {
-                from: player3address,
-            })
-            return false;
-        }catch(error){
-            return true;
-        }
-        
-    })
 
-    //test incorrecrt wagerIndex
 
 
 })
