@@ -77,7 +77,7 @@ contract cointoss {
             "Invalid wager index, must be between 0-3"
         );
         require(wager > 0, "Wager must be a positive number");
-        require(msg.value == wager,"Amount sent must be equal to wager");
+        require(msg.value == wager, "Amount sent must be equal to wager");
 
         //check if wagerIndex has room
         uint256 count = 0;
