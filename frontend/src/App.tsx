@@ -1,11 +1,9 @@
 import * as React from 'react';
-import styled from 'styled-components';
 
 import Web3Modal from 'web3modal';
 // @ts-ignore
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import Column from './components/Column';
-import Wrapper from './components/Wrapper';
 import Header from './components/Header';
 import Loader from './components/Loader';
 import ConnectButton from './components/ConnectButton';
@@ -13,40 +11,6 @@ import ConnectButton from './components/ConnectButton';
 import { Web3Provider } from '@ethersproject/providers';
 import { getChainData } from './helpers/utilities';
 
-const SLayout = styled.div`
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  text-align: center;
-`;
-
-const SContent = styled(Wrapper)`
-  width: 100%;
-  height: 100%;
-  padding: 0 16px;
-`;
-
-const SContainer = styled.div`
-  height: 100%;
-  min-height: 200px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  word-break: break-word;
-`;
-
-const SLanding = styled(Column)`
-  height: 600px;
-`;
-
-// @ts-ignore
-const SBalances = styled(SLanding)`
-  height: 100%;
-  & h3 {
-    padding-top: 30px;
-  }
-`;
 
 interface IAppState {
   fetching: boolean;
@@ -117,7 +81,7 @@ class App extends React.Component<any, any> {
 
   };
 
-  public subscribeToProviderEvents = async (provider:any) => {
+  public subscribeToProviderEvents = async (provider: any) => {
     if (!provider.on) {
       return;
     }
@@ -129,7 +93,7 @@ class App extends React.Component<any, any> {
     await this.web3Modal.off('accountsChanged');
   };
 
-  public async unSubscribe(provider:any) {
+  public async unSubscribe(provider: any) {
     // Workaround for metamask widget > 9.0.3 (provider.off is undefined);
     window.location.reload(false);
     if (!provider.off) {
@@ -142,7 +106,7 @@ class App extends React.Component<any, any> {
   }
 
   public changedAccount = async (accounts: string[]) => {
-    if(!accounts.length) {
+    if (!accounts.length) {
       // Metamask Lock fire an empty accounts array 
       await this.resetApp();
     } else {
@@ -156,7 +120,7 @@ class App extends React.Component<any, any> {
     const chainId = network.chainId;
     await this.setState({ chainId, library });
   }
-  
+
   public close = async () => {
     this.resetApp();
   }
@@ -193,7 +157,7 @@ class App extends React.Component<any, any> {
       fetching
     } = this.state;
     return (
-      <SLayout>
+      <>
         <Column maxWidth={1000} spanHeight>
           <Header
             connected={connected}
@@ -201,21 +165,27 @@ class App extends React.Component<any, any> {
             chainId={chainId}
             killSession={this.resetApp}
           />
-          <SContent>
+          <>
             {fetching ? (
               <Column center>
-                <SContainer>
+                <>
                   <Loader />
-                </SContainer>
+                </>
               </Column>
             ) : (
-                <SLanding center>
-                  {!this.state.connected && <ConnectButton onClick={this.onConnect} />}
-                </SLanding>
-              )}
-          </SContent>
+              <>
+                {!this.state.connected ?
+                  (<ConnectButton onClick={this.onConnect} />)
+                  :
+                  (
+                    <p>Connected to wallet</p>
+                  )
+                  }
+              </>
+            )}
+          </>
         </Column>
-      </SLayout>
+      </>
     );
   };
 }
