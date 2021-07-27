@@ -1,30 +1,12 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import { createGlobalStyle } from "styled-components";
-
-import App from "./App";
-import { globalStyle } from "./styles";
-const GlobalStyle = createGlobalStyle`
-  ${globalStyle}
-`;
-
-// @ts-ignore
-declare global {
-  // tslint:disable-next-line
-  interface Window {
-    web3: any;
-    ethereum: any;
-    Web3Modal: any;
-    Box: any;
-    box: any;
-    space: any;
-  }
-}
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
 
 ReactDOM.render(
-  <>
-    <GlobalStyle />
+  <React.StrictMode>
     <App />
-  </>,
-  document.getElementById("root")
+  </React.StrictMode>,
+  document.getElementById('root')
 );
+
