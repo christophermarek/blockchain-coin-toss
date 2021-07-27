@@ -2,23 +2,34 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { useEthers, useEtherBalance } from '@usedapp/core';
-import { BigNumber } from 'ethers';
+import { formatEther } from '@ethersproject/units'
+
+
+/*
+What I want to do
+Connect to wallet
+Connect to smart contract
+Get all contests in smart contract
+user join contest
+user leave contest
+contest completed
+*/
 
 function App() {
-  const STAKING_CONTRACT = '0x00000000219ab540356cBB839Cbe05303d7705Fa'
+  const { activateBrowserWallet, account } = useEthers()
+  const etherBalance = useEtherBalance(account)
 
-  const { activateBrowserWallet, deactivate, account } = useEthers()
-  const userBalance = useEtherBalance(account)
-  const stakingBalance = useEtherBalance(STAKING_CONTRACT)
+  //coin toss staking contract local address, needs to be changed if deployed to mainnet
+  const STAKING_CONTRACT = '0x00000000219ab540356cBB839Cbe05303d7705Fa'
 
   return (
     <div>
-      {!account && <button onClick={() => activateBrowserWallet}> Connect </button>}
-      {account && <button onClick={deactivate}> Disconnect </button>}
+      <div>
+        <button onClick={() => activateBrowserWallet()}>Connect</button>
+      </div>
 
-      {stakingBalance && <p>ETH2 staking balance: {formatEther(stakingBalance)} ETH </p>}
       {account && <p>Account: {account}</p>}
-      {userBalance && <p>Ether balance: {formatEther(userBalance)} ETH </p>}
+      {etherBalance && <p>Balance: {formatEther(etherBalance)}</p>}
     </div>
   )
 }
