@@ -19,35 +19,44 @@ contest completed
 
 const COINTOSS_CONTRACT = '0x232d8D447ab3421309bE880646580363a632b68b';
 
-async function GetWagers(index: number) {
-  let abi = new utils.Interface(cointossAbi.abi);
-  console.log(abi);
-  const wagers: any = useContractCall({
-    abi: abi,
-    address: COINTOSS_CONTRACT,
-    method: "coinTossWagers",
-    args: [2],
-  }) ?? [];
-
-  return wagers;
-}
 
 function App() {
 
-  const [wagers, setWagers] = useState<any>(null);
+  const [contests, setContests] = useState<any>(null);
 
   const { activateBrowserWallet, account } = useEthers()
   const etherBalance = useEtherBalance(account)
 
-  //coin toss staking contract local address, needs to be changed if deployed to mainnet
+  function useGetContests(index: number) {
+    let abi = new utils.Interface(cointossAbi.abi);
+    const arrayItem: any = useContractCall({
+      abi: abi,
+      address: COINTOSS_CONTRACT,
+      method: "coinTossWagers",
+      args: [index],
+    }) ?? [];
+  
+    return arrayItem;
+  }
 
   
-  console.log(GetWagers(0));
+  //coin toss staking contract local address, needs to be changed if deployed to mainnet
+  async function SetContestsFromBlockChain(){
+    let row0 = useGetContests(0);
+    let row1 = useGetContests(1);
+    let row2 = useGetContests(2);
+    let row3 = useGetContests(3);
+    let defContests = [row0, row1, row2, row3];
+    setContests(defContests);
+  }
+   
 
   return (
     <div>
       <div>
         <button onClick={() => activateBrowserWallet()}>Connect</button>
+        <button onClick={() => SetContestsFromBlockChain()}>Get Contests</button>
+        
       </div>
 
       {account && <p>Account: {account}</p>}
