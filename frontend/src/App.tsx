@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { useEthers, useEtherBalance, useContractCall } from '@usedapp/core';
@@ -19,28 +19,30 @@ contest completed
 
 const COINTOSS_CONTRACT = '0x232d8D447ab3421309bE880646580363a632b68b';
 
-async function GetWagers() {
+async function GetWagers(index: number) {
   let abi = new utils.Interface(cointossAbi.abi);
   console.log(abi);
-  const [wagers]: any = useContractCall({
+  const wagers: any = useContractCall({
     abi: abi,
     address: COINTOSS_CONTRACT,
     method: "coinTossWagers",
-    args: [],
+    args: [2],
   }) ?? [];
 
   return wagers;
 }
 
-
 function App() {
+
+  const [wagers, setWagers] = useState<any>(null);
+
   const { activateBrowserWallet, account } = useEthers()
   const etherBalance = useEtherBalance(account)
 
   //coin toss staking contract local address, needs to be changed if deployed to mainnet
 
   
-  console.log(GetWagers());
+  console.log(GetWagers(0));
 
   return (
     <div>
