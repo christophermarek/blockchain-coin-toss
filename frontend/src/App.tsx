@@ -27,13 +27,14 @@ function App() {
   const { activateBrowserWallet, account } = useEthers();
   const etherBalance = useEtherBalance(account);
 
-  const { state, send } = useContractFunction(contract, 'deposit', { transactionName: 'Wrap' })
+  const { state, send } = useContractFunction(contract, 'enterContest');
 
 
-  const enterWager = (contestIndex: number, wager: any) => {
+  const enterWager = async(contestIndex: number, wager: any) => {
 
-      console.log(state);
-      console.log(send);
+    await send(contestIndex, wager, { value: wager});
+    console.log(state);
+  
   }
 
   const leaveWager = (contestIndex: number) => {
@@ -61,7 +62,7 @@ function App() {
           <p>User 1 Wager {arrayItem.user1wager.toString()}</p>
           <p>User 2 {arrayItem.user2}</p>
           <p>User 2 Wager {arrayItem.user2wager.toString()}</p>
-          <input type='button' onClick={() => enterWager(index)} value='Join' />
+          <input type='button' onClick={() => enterWager(index, 5)} value='Join' />
           <input type='button' onClick={() => leaveWager(index)} value='Leave' />
         </div>
       );
@@ -71,6 +72,15 @@ function App() {
 
   return (
     <div>
+      {state.status === 'Exception' &&
+        <>
+          <p>Error sending contract function</p>
+          <ul>
+            <li>{state.status}</li>
+            <li>{state.errorMessage}</li>
+          </ul>
+        </>
+      }
       {account ?
         (
           <>
