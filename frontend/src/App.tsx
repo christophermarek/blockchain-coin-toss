@@ -29,16 +29,18 @@ function App() {
 
   const { state, send } = useContractFunction(contract, 'enterContest');
 
+  //cant destructure cause i want to call more than 1 function
+  const leaveContest = useContractFunction(contract, 'leaveContest');
+  
 
   const enterWager = async(contestIndex: number, wager: any) => {
 
     await send(contestIndex, wager, { value: wager});
-    console.log(state);
   
   }
 
-  const leaveWager = (contestIndex: number) => {
-
+  const leaveWager = async(contestIndex: number) => {
+    await leaveContest.send(contestIndex);
   }
 
   function GetContests(index: number) {
